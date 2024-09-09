@@ -5,14 +5,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.sarinsa.tomfoolery.client.TomfooleryModelLayers;
 import com.sarinsa.tomfoolery.common.core.Tomfoolery;
-import com.sarinsa.tomfoolery.common.entity.GrenadeRoundEntity;
+import com.sarinsa.tomfoolery.common.entity.GrenadeRound;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-public class GrenadeRoundRenderer extends EntityRenderer<GrenadeRoundEntity> {
+public class GrenadeRoundRenderer extends EntityRenderer<GrenadeRound> {
 
     private static final ResourceLocation TEXTURE = Tomfoolery.resourceLoc("textures/entity/grenade/grenade.png");
     private GrenadeRoundModel model;
@@ -22,7 +22,7 @@ public class GrenadeRoundRenderer extends EntityRenderer<GrenadeRoundEntity> {
         model = new GrenadeRoundModel(context.bakeLayer(TomfooleryModelLayers.GRENADE_ROUND));
     }
 
-    public void render(GrenadeRoundEntity entity, float limbRot, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(GrenadeRound entity, float limbRot, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         poseStack.translate(0.0D, -1.25D, 0.0D);
 
@@ -40,7 +40,7 @@ public class GrenadeRoundRenderer extends EntityRenderer<GrenadeRoundEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(GrenadeRoundEntity entity) {
+    public ResourceLocation getTextureLocation(GrenadeRound entity) {
         return TEXTURE;
     }
 }

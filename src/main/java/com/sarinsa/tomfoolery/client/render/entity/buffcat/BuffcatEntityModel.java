@@ -3,11 +3,11 @@ package com.sarinsa.tomfoolery.client.render.entity.buffcat;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.sarinsa.tomfoolery.common.entity.living.BuffcatEntity;
+import com.sarinsa.tomfoolery.common.entity.living.Buffcat;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 
-public class BuffcatEntityModel extends EntityModel<BuffcatEntity> {
+public class BuffcatEntityModel extends EntityModel<Buffcat> {
 
     /*
     private final ModelRenderer left_ear;
@@ -161,7 +161,7 @@ public class BuffcatEntityModel extends EntityModel<BuffcatEntity> {
     }
 
     @Override
-    public void setupAnim(BuffcatEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+    public void setupAnim(Buffcat entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
         /*
         body_sub_9.yRot = netHeadYaw * ((float)Math.PI / 180F);
         body_sub_9.xRot = headPitch * ((float)Math.PI / 180F);

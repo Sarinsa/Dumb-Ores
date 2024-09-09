@@ -28,23 +28,23 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
 
-public class GrenadeRoundEntity extends Projectile implements IEntityAdditionalSpawnData {
+public class GrenadeRound extends Projectile implements IEntityAdditionalSpawnData {
 
     private BlockPos initialPos = BlockPos.ZERO;
     private GrenadeType grenadeType = TomGrenadeTypes.EXPLOSIVE.get();
 
-    public GrenadeRoundEntity(EntityType<? extends Projectile> entityType, Level level) {
+    public GrenadeRound(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public GrenadeRoundEntity(double x, double y, double z, Level level) {
+    public GrenadeRound(double x, double y, double z, Level level) {
         this(TomEntities.GRENADE_ROUND.get(), level);
         moveTo(x, y, z, getYRot(), getXRot());
         initialPos = new BlockPos(x, y, z);
         reapplyPosition();
     }
 
-    public GrenadeRoundEntity(LivingEntity shooter, Level level) {
+    public GrenadeRound(LivingEntity shooter, Level level) {
         this(shooter.getX(), shooter.getEyeY(), shooter.getZ(), level);
         setOwner(shooter);
         setRot(shooter.getYRot(), shooter.getXRot());

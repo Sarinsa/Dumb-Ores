@@ -3,8 +3,8 @@ package com.sarinsa.tomfoolery.common.item;
 import com.sarinsa.tomfoolery.api.ILauncherLogic;
 import com.sarinsa.tomfoolery.common.core.registry.TomItems;
 import com.sarinsa.tomfoolery.common.core.registry.TomSounds;
-import com.sarinsa.tomfoolery.common.entity.GrenadeRoundEntity;
-import com.sarinsa.tomfoolery.common.entity.InstaSaplingEntity;
+import com.sarinsa.tomfoolery.common.entity.GrenadeRound;
+import com.sarinsa.tomfoolery.common.entity.InstaSapling;
 import com.sarinsa.tomfoolery.common.util.TranslationReferences;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
@@ -24,7 +24,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -108,7 +107,7 @@ public class GrenadeLauncherItem extends ProjectileWeaponItem {
                 }
 
                 else if (ammoStack.getItem() instanceof GrenadeRoundItem) {
-                    GrenadeRoundEntity entity = new GrenadeRoundEntity(player, level);
+                    GrenadeRound entity = new GrenadeRound(player, level);
                     entity.shootFromRotation(player, player.getXRot(), player.getYRot(), 2.5F, 2.5F, 2.5F);
                     entity.setGrenadeType(((GrenadeRoundItem) ammoStack.getItem()).getGrenadeType());
                     level.addFreshEntity(entity);
@@ -121,7 +120,7 @@ public class GrenadeLauncherItem extends ProjectileWeaponItem {
                 }
                 else if (ammoStack.getItem() instanceof BlockItem && ((BlockItem) ammoStack.getItem()).getBlock() instanceof SaplingBlock) {
                     AbstractTreeGrower tree = ((SaplingBlock) ((BlockItem) ammoStack.getItem()).getBlock()).treeGrower;
-                    InstaSaplingEntity entity = new InstaSaplingEntity(player, level, tree);
+                    InstaSapling entity = new InstaSapling(player, level, tree);
                     entity.setItem(ammoStack);
                     entity.shootFromRotation(player, player.getXRot(), player.getYRot(), 2.0F, 2.0F, 2.0F);
                     level.addFreshEntity(entity);

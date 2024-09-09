@@ -12,11 +12,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -28,30 +26,28 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
 
-public class InstaSaplingEntity extends Projectile implements IEntityAdditionalSpawnData, ItemSupplier {
+public class InstaSapling extends Projectile implements IEntityAdditionalSpawnData, ItemSupplier {
 
-    private static final EntityDataAccessor<ItemStack> ITEM_STACK = SynchedEntityData.defineId(InstaSaplingEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> ITEM_STACK = SynchedEntityData.defineId(InstaSapling.class, EntityDataSerializers.ITEM_STACK);
 
     private AbstractTreeGrower tree;
 
-    public InstaSaplingEntity(EntityType<? extends Projectile> entityType, Level level) {
+    public InstaSapling(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public InstaSaplingEntity(double x, double y, double z, Level level, AbstractTreeGrower tree) {
+    public InstaSapling(double x, double y, double z, Level level, AbstractTreeGrower tree) {
         this(TomEntities.INSTA_SAPLING.get(), level);
         moveTo(x, y, z, getYRot(), getXRot());
         reapplyPosition();
         this.tree = tree;
     }
 
-    public InstaSaplingEntity(LivingEntity shooter, Level level, AbstractTreeGrower tree) {
+    public InstaSapling(LivingEntity shooter, Level level, AbstractTreeGrower tree) {
         this(shooter.getX(), shooter.getEyeY(), shooter.getZ(), level, tree);
         setOwner(shooter);
         setRot(shooter.getYRot(), shooter.getXRot());

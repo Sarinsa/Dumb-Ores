@@ -1,6 +1,8 @@
 package com.sarinsa.tomfoolery.client;
 
 import com.sarinsa.tomfoolery.client.render.entity.cactus.CactusEntityRenderer;
+import com.sarinsa.tomfoolery.client.render.entity.ghastinator.GhastinatorModel;
+import com.sarinsa.tomfoolery.client.render.entity.ghastinator.GhastinatorRenderer;
 import com.sarinsa.tomfoolery.client.render.entity.grenade.GrenadeRoundModel;
 import com.sarinsa.tomfoolery.client.render.entity.grenade.GrenadeRoundRenderer;
 import com.sarinsa.tomfoolery.common.core.Tomfoolery;
@@ -44,6 +46,7 @@ public class ClientRegister {
     @SubscribeEvent
     public static void registerLayerDefs(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(TomfooleryModelLayers.GRENADE_ROUND, GrenadeRoundModel::createBodyLayer);
+        event.registerLayerDefinition(TomfooleryModelLayers.GHASTINATOR, GhastinatorModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -52,5 +55,7 @@ public class ClientRegister {
         event.registerEntityRenderer(TomEntities.GRENADE_ROUND.get(), GrenadeRoundRenderer::new);
         event.registerEntityRenderer(TomEntities.LAUNCHED_TORCH.get(), (context) -> new ThrownItemRenderer<>(context, 1.75F, true));
         event.registerEntityRenderer(TomEntities.INSTA_SAPLING.get(), (context) -> new ThrownItemRenderer<>(context, 1.75F, true));
+        event.registerEntityRenderer(TomEntities.GHASTINATOR.get(), GhastinatorRenderer::new);
+        event.registerEntityRenderer(TomEntities.HUGE_FIREBALL.get(), (context) -> new ThrownItemRenderer<>(context, 20.0F, true));
     }
 }

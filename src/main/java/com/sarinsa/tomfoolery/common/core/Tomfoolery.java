@@ -6,6 +6,7 @@ import com.sarinsa.tomfoolery.api.TomfooleryPlugin;
 import com.sarinsa.tomfoolery.api.impl.RegistryHelper;
 import com.sarinsa.tomfoolery.api.impl.TomfooleryAPI;
 import com.sarinsa.tomfoolery.common.core.config.TomClientConfig;
+import com.sarinsa.tomfoolery.common.core.config.TomCommonConfig;
 import com.sarinsa.tomfoolery.common.core.registry.*;
 import com.sarinsa.tomfoolery.common.event.CapabilityEvents;
 import com.sarinsa.tomfoolery.common.event.EntityEvents;
@@ -52,8 +53,10 @@ public class Tomfoolery {
 
         MinecraftForge.EVENT_BUS.register(new CapabilityEvents());
         MinecraftForge.EVENT_BUS.register(new EntityEvents());
+        MinecraftForge.EVENT_BUS.register(new ServerEventManager());
 
         eventBus.addListener(TomEntities::createEntityAttributes);
+        eventBus.addListener(TomEntities::registerEntitySpawnPlacement);
 
         TomBlocks.BLOCKS.register(eventBus);
         TomItems.ITEMS.register(eventBus);
@@ -68,13 +71,13 @@ public class Tomfoolery {
         TomConfiguredFeatures.P_REGISTRY.register(eventBus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TomClientConfig.CLIENT_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TomCommonConfig.COMMON_SPEC);
     }
 
 
     public void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             TomPotions.registerBrewingRecipes();
-            TomEntities.registerEntitySpawnPlacement();
         });
     }
 

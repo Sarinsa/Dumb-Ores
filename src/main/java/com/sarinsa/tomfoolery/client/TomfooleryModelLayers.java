@@ -7,6 +7,7 @@ public class TomfooleryModelLayers {
 
     public static final ModelLayerLocation BUFFCAT = create("buffcat");
     public static final ModelLayerLocation GRENADE_ROUND = create("grenade_round");
+    public static final ModelLayerLocation GHASTINATOR = create("ghastinator");
 
 
     private static ModelLayerLocation create(String path) {

@@ -24,9 +24,9 @@ import org.xml.sax.helpers.AttributesImpl;
 
 import javax.annotation.Nullable;
 
-public class BuffcatEntity extends TamableAnimal {
+public class Buffcat extends TamableAnimal {
 
-    public BuffcatEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
+    public Buffcat(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
     }
 

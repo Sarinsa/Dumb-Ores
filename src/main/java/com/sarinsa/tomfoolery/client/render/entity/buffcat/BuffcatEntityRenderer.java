@@ -1,12 +1,12 @@
 package com.sarinsa.tomfoolery.client.render.entity.buffcat;
 
 import com.sarinsa.tomfoolery.common.core.Tomfoolery;
-import com.sarinsa.tomfoolery.common.entity.living.BuffcatEntity;
+import com.sarinsa.tomfoolery.common.entity.living.Buffcat;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-public class BuffcatEntityRenderer extends LivingEntityRenderer<BuffcatEntity, BuffcatEntityModel> {
+public class BuffcatEntityRenderer extends LivingEntityRenderer<Buffcat, BuffcatEntityModel> {
 
     private static final ResourceLocation TEXTURE = Tomfoolery.resourceLoc("textures/entity/buffcat/calico.png");
 
@@ -15,7 +15,7 @@ public class BuffcatEntityRenderer extends LivingEntityRenderer<BuffcatEntity, B
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BuffcatEntity entity) {
+    public ResourceLocation getTextureLocation(Buffcat entity) {
         return TEXTURE;
     }
 }

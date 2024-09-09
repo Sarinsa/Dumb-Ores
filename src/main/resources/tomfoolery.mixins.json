@@ -5,7 +5,9 @@
   "minVersion": "0.8",
   "refmap": "tomfoolery.mixins.refmap.json",
   "mixins": [],
-  "client": [],
+  "client": [
+    "LivingEntityRendererMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

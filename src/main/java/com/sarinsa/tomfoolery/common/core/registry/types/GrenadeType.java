@@ -1,6 +1,5 @@
 package com.sarinsa.tomfoolery.common.core.registry.types;
 
-import com.sarinsa.tomfoolery.common.entity.GrenadeRoundEntity;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Projectile;

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 
-//@Mixin(LivingEntityRenderer.class)
+@Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements RenderLayerParent<T, M> {
 
     protected LivingEntityRendererMixin(EntityRendererProvider.Context context) {
@@ -21,7 +21,6 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     }
 
 
-    /*
     @Shadow
     protected abstract float getFlipDegrees(T entity);
 
@@ -29,6 +28,4 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
     public float replaceFlipDegrees(LivingEntityRenderer<T, M> livingRenderer, T entity) {
         return ClientMixinHooks.getRendererFlipDegrees(getFlipDegrees(entity));
     }
-
-     */
 }

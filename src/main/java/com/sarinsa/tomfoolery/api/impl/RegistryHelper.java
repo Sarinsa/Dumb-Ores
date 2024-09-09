@@ -5,18 +5,11 @@ import com.sarinsa.tomfoolery.api.IRegistryHelper;
 import com.sarinsa.tomfoolery.common.core.Tomfoolery;
 import com.sarinsa.tomfoolery.common.core.registry.TomGrenadeTypes;
 import com.sarinsa.tomfoolery.common.core.registry.types.GrenadeType;
-import com.sarinsa.tomfoolery.common.entity.LaunchedTorchEntity;
+import com.sarinsa.tomfoolery.common.entity.LaunchedTorch;
 import com.sarinsa.tomfoolery.common.item.GrenadeLauncherItem;
-import com.sarinsa.tomfoolery.common.util.EntityHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -56,7 +49,7 @@ public class RegistryHelper implements IRegistryHelper {
         registerLauncherLogic(
                 Items.TORCH,
                 (level, player, hand) -> {
-                    LaunchedTorchEntity torchEntity = new LaunchedTorchEntity(player, level);
+                    LaunchedTorch torchEntity = new LaunchedTorch(player, level);
                     torchEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), 2.5F, 2.5F, 2.5F);
                     level.addFreshEntity(torchEntity);
                 },

@@ -2,13 +2,13 @@ package com.sarinsa.tomfoolery.client.render.entity.grenade;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.sarinsa.tomfoolery.common.entity.GrenadeRoundEntity;
+import com.sarinsa.tomfoolery.common.entity.GrenadeRound;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
-public class GrenadeRoundModel extends EntityModel<GrenadeRoundEntity> {
+public class GrenadeRoundModel extends EntityModel<GrenadeRound> {
 
     private final ModelPart grenade;
 
@@ -31,7 +31,7 @@ public class GrenadeRoundModel extends EntityModel<GrenadeRoundEntity> {
     }
 
     @Override
-    public void setupAnim(GrenadeRoundEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(GrenadeRound entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
     }
 

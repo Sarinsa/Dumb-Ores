@@ -3,26 +3,19 @@ package com.sarinsa.tomfoolery.common.entity;
 import com.sarinsa.tomfoolery.common.core.registry.TomEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.TallGrassBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TheEndGatewayBlockEntity;
@@ -35,24 +28,24 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
 
-public class LaunchedTorchEntity extends Projectile implements IEntityAdditionalSpawnData, ItemSupplier {
+public class LaunchedTorch extends Projectile implements IEntityAdditionalSpawnData, ItemSupplier {
 
     private static final ItemStack renderedItem = new ItemStack(Items.TORCH);
 
     private BlockPos initialPos = BlockPos.ZERO;
 
-    public LaunchedTorchEntity(EntityType<? extends Projectile> entityType, Level level) {
+    public LaunchedTorch(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public LaunchedTorchEntity(double x, double y, double z, Level level) {
+    public LaunchedTorch(double x, double y, double z, Level level) {
         this(TomEntities.LAUNCHED_TORCH.get(), level);
         moveTo(x, y, z, getYRot(), getXRot());
         initialPos = new BlockPos(x, y, z);
         reapplyPosition();
     }
 
-    public LaunchedTorchEntity(LivingEntity shooter, Level level) {
+    public LaunchedTorch(LivingEntity shooter, Level level) {
         this(shooter.getX(), shooter.getEyeY(), shooter.getZ(), level);
         setOwner(shooter);
         setRot(shooter.getYRot(), shooter.getXRot());
@@ -127,22 +120,24 @@ public class LaunchedTorchEntity extends Projectile implements IEntityAdditional
     protected void onHitBlock(BlockHitResult hitResult) {
         BlockPos pos = hitResult.getBlockPos();
         Direction direction = hitResult.getDirection();
-        boolean placed = false;
 
-        if (direction == Direction.UP) {
-            if (level.getBlockState(pos.relative(direction)).isAir()) {
-                level.setBlock(pos.relative(direction), Blocks.TORCH.defaultBlockState(), 3);
-                placed = true;
+        if (!level.isClientSide) {
+            boolean placed = false;
+
+            if (direction == Direction.UP) {
+                if (level.getBlockState(pos.relative(direction)).isAir() && level.getBlockState(pos).isFaceSturdy(level, pos, direction)) {
+                    level.setBlock(pos.relative(direction), Blocks.TORCH.defaultBlockState(), 3);
+                    placed = true;
+                }
+            } else if (direction != Direction.DOWN) {
+                if (level.getBlockState(pos.relative(direction)).isAir()) {
+                    level.setBlock(pos.relative(direction), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
+                    placed = true;
+                }
             }
-        }
-        else if (direction != Direction.DOWN) {
-            if (level.getBlockState(pos.relative(direction)).isAir()) {
-                level.setBlock(pos.relative(direction), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
-                placed = true;
+            if (!placed) {
+                level.addFreshEntity(new ItemEntity(level, getX(), getY(), getZ(), new ItemStack(Items.TORCH)));
             }
-        }
-        if (!level.isClientSide && !placed) {
-            level.addFreshEntity(new ItemEntity(level, getX(), getY(), getZ(), new ItemStack(Items.TORCH)));
         }
         discard();
     }
