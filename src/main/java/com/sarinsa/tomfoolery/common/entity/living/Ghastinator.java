@@ -175,6 +175,7 @@ public class Ghastinator extends Ghast {
                             level.playSound(null, ghastinator.blockPosition(), SoundEvents.GHAST_SHOOT, SoundSource.HOSTILE, 15.0F, 0.35F);
                         }
 
+                        System.out.println(level.isClientSide);
                         HugeFireball fireball = new HugeFireball(level, ghastinator, x, y, z, ghastinator.getExplosionPower());
                         fireball.setPos(ghastinator.getX() + viewVec.x * 16.0D, ghastinator.getY(0.5D) + 0.5D, fireball.getZ() + viewVec.z * 16.0D);
                         level.addFreshEntity(fireball);

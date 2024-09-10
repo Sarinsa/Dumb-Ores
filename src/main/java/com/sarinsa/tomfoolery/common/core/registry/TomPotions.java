@@ -28,8 +28,8 @@ public class TomPotions {
 
     public static void registerBrewingRecipes() {
         registerBrewingRecipe(CACTUS_ATTRACTION.get(), Potions.SLOW_FALLING, Ingredient.of(Items.CACTUS));
-        registerBrewingRecipe(CACTUS_ATTRACTION_LONG.get(), CACTUS_ATTRACTION.get(), Ingredient.of(Tags.Items.DUSTS_GLOWSTONE));
-        registerBrewingRecipe(CACTUS_ATTRACTION_STRONG.get(), CACTUS_ATTRACTION.get(), Ingredient.of(Tags.Items.DUSTS_REDSTONE));
+        registerBrewingRecipe(CACTUS_ATTRACTION_LONG.get(), CACTUS_ATTRACTION.get(), Ingredient.of(Tags.Items.DUSTS_REDSTONE));
+        registerBrewingRecipe(CACTUS_ATTRACTION_STRONG.get(), CACTUS_ATTRACTION.get(), Ingredient.of(Tags.Items.DUSTS_GLOWSTONE));
     }
 
     private static void registerBrewingRecipe(Potion potionResult, Potion potionIngredient, Ingredient itemIngredient) {

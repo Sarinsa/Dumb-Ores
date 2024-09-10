@@ -107,6 +107,11 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
     }
 
     @Override
+    public boolean isPushable() {
+        return true;
+    }
+
+    @Override
     public boolean canChangeDimensions() {
         return false;
     }
