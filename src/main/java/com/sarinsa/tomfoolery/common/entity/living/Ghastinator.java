@@ -68,7 +68,7 @@ public class Ghastinator extends Ghast {
 
     @Override
     public int getExplosionPower() {
-        return 15;
+        return 20;
     }
 
     @Override

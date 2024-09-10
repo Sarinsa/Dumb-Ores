@@ -17,6 +17,7 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ServerEventManager {
@@ -48,7 +49,10 @@ public class ServerEventManager {
                     if (server.overworld().getDifficulty() == Difficulty.PEACEFUL)
                         return;
 
-                    for (ServerPlayer player : server.overworld().players()) {
+                    List<ServerPlayer> players = server.overworld().players();
+                    Collections.shuffle(players);
+
+                    for (ServerPlayer player : players) {
                         checkGhastinatorSpawn(server, player);
                     }
                 }

@@ -39,7 +39,6 @@ public class TomItems {
     public static final RegistryObject<Item> COOL_DIRT_GLASSES = registerItem("cool_dirt_glasses", () -> new CoolBlockReplacerGlassesItem(() -> Blocks.DIRT));
 
     //public static final RegistryObject<ForgeSpawnEggItem> BUFFCAT_SPAWN_EGG = registerSpawnEgg(TomEntities.BUFFCAT, 0x4E7EA4, 0x714B34);
-    public static final RegistryObject<ForgeSpawnEggItem> GHASTINATOR_SPAWN_EGG = registerSpawnEgg(TomEntities.GHASTINATOR, 0x4E7EA4, 0x714B34);
 
 
     private static <T extends Item> RegistryObject<T> registerItem(String name, Supplier<T> itemSupplier) {
