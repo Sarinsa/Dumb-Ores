@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -94,14 +95,14 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
         }
         move(MoverType.SELF, getDeltaMovement());
 
-        for (LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(1.2D))) {
+        for (LivingEntity livingEntity : level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(1.2D))) {
             if (getBoundingBox().intersects(livingEntity.getBoundingBox())) {
-                livingEntity.hurt(DamageSource.CACTUS, 1.0F);
+                livingEntity.hurt(level().damageSources().cactus(), 1.0F);
             }
         }
 
-        if (!level.isClientSide && onGround && gracePeriod <= 0) {
-            level.setBlock(blockPosition(), Blocks.CACTUS.defaultBlockState(), 3);
+        if (!level().isClientSide && onGround() && gracePeriod <= 0) {
+            level().setBlock(blockPosition(), Blocks.CACTUS.defaultBlockState(), 3);
             discard();
         }
     }
@@ -123,7 +124,7 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        Entity entity = level.getEntity(compoundTag.getInt("FollowTarget"));
+        Entity entity = level().getEntity(compoundTag.getInt("FollowTarget"));
 
         if (entity instanceof LivingEntity) {
             followTarget = (LivingEntity) entity;
@@ -143,7 +144,7 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
 
     @Nonnull
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -154,7 +155,7 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
 
     @Override
     public void readSpawnData(FriendlyByteBuf additionalData) {
-        Entity entity = level.getEntity(additionalData.readInt());
+        Entity entity = level().getEntity(additionalData.readInt());
 
         if (entity instanceof LivingEntity) {
             followTarget = (LivingEntity) entity;

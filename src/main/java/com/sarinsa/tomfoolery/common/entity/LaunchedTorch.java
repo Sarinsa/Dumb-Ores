@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -41,7 +42,7 @@ public class LaunchedTorch extends Projectile implements IEntityAdditionalSpawnD
     public LaunchedTorch(double x, double y, double z, Level level) {
         this(TomEntities.LAUNCHED_TORCH.get(), level);
         moveTo(x, y, z, getYRot(), getXRot());
-        initialPos = new BlockPos(x, y, z);
+        initialPos = new BlockPos((int) x, (int) y, (int) z);
         reapplyPosition();
     }
 
@@ -60,22 +61,22 @@ public class LaunchedTorch extends Projectile implements IEntityAdditionalSpawnD
     public void tick() {
         super.tick();
 
-        HitResult hitResult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+        HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         boolean teleporting = false;
 
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockPos blockpos = ((BlockHitResult)hitResult).getBlockPos();
-            BlockState blockstate = level.getBlockState(blockpos);
+            BlockState blockstate = level().getBlockState(blockpos);
 
             if (blockstate.is(Blocks.NETHER_PORTAL)) {
                 handleInsidePortal(blockpos);
                 teleporting = true;
             }
             else if (blockstate.is(Blocks.END_GATEWAY)) {
-                BlockEntity blockEntity = level.getExistingBlockEntity(blockpos);
+                BlockEntity blockEntity = level().getExistingBlockEntity(blockpos);
 
                 if (blockEntity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-                    TheEndGatewayBlockEntity.teleportEntity(level, blockpos, level.getBlockState(blockpos), this, (TheEndGatewayBlockEntity) blockEntity);
+                    TheEndGatewayBlockEntity.teleportEntity(level(), blockpos, level().getBlockState(blockpos), this, (TheEndGatewayBlockEntity) blockEntity);
                 }
                 teleporting = true;
             }
@@ -102,8 +103,8 @@ public class LaunchedTorch extends Projectile implements IEntityAdditionalSpawnD
         if (isInWater()) {
             discard();
 
-            if (!level.isClientSide) {
-                level.addFreshEntity(new ItemEntity(level, x, y, z, new ItemStack(Items.TORCH)));
+            if (!level().isClientSide) {
+                level().addFreshEntity(new ItemEntity(level(), x, y, z, new ItemStack(Items.TORCH)));
             }
         }
     }
@@ -121,22 +122,22 @@ public class LaunchedTorch extends Projectile implements IEntityAdditionalSpawnD
         BlockPos pos = hitResult.getBlockPos();
         Direction direction = hitResult.getDirection();
 
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             boolean placed = false;
 
             if (direction == Direction.UP) {
-                if (level.getBlockState(pos.relative(direction)).isAir() && level.getBlockState(pos).isFaceSturdy(level, pos, direction)) {
-                    level.setBlock(pos.relative(direction), Blocks.TORCH.defaultBlockState(), 3);
+                if (level().getBlockState(pos.relative(direction)).isAir() && level().getBlockState(pos).isFaceSturdy(level(), pos, direction)) {
+                    level().setBlock(pos.relative(direction), Blocks.TORCH.defaultBlockState(), 3);
                     placed = true;
                 }
             } else if (direction != Direction.DOWN) {
-                if (level.getBlockState(pos.relative(direction)).isAir()) {
-                    level.setBlock(pos.relative(direction), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
+                if (level().getBlockState(pos.relative(direction)).isAir()) {
+                    level().setBlock(pos.relative(direction), Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction), 3);
                     placed = true;
                 }
             }
             if (!placed) {
-                level.addFreshEntity(new ItemEntity(level, getX(), getY(), getZ(), new ItemStack(Items.TORCH)));
+                level().addFreshEntity(new ItemEntity(level(), getX(), getY(), getZ(), new ItemStack(Items.TORCH)));
             }
         }
         discard();
@@ -161,7 +162,7 @@ public class LaunchedTorch extends Projectile implements IEntityAdditionalSpawnD
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

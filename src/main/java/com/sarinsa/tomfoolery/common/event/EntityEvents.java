@@ -3,7 +3,7 @@ package com.sarinsa.tomfoolery.common.event;
 import com.sarinsa.tomfoolery.common.capability.CapabilityHelper;
 import com.sarinsa.tomfoolery.common.core.registry.TomEffects;
 import com.sarinsa.tomfoolery.common.core.registry.TomEntities;
-import com.sarinsa.tomfoolery.common.entity.living.ai.CreeperChestHideGoal;
+import com.sarinsa.tomfoolery.common.entity.living.Buffcat;
 import com.sarinsa.tomfoolery.common.item.CoolGlassesItem;
 import com.sarinsa.tomfoolery.common.network.NetworkHelper;
 import com.sarinsa.tomfoolery.common.util.NBTHelper;
@@ -75,13 +75,6 @@ public class EntityEvents {
     }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinLevelEvent event) {
-        if (event.getEntity() instanceof Creeper creeper) {
-            creeper.goalSelector.addGoal(4, new CreeperChestHideGoal(creeper, 1.0D, 30));
-        }
-    }
-
-    @SubscribeEvent
     public void onPlayerJoinWorld(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof LivingEntity livingEntity) {
             Level level = livingEntity.getCommandSenderWorld();
@@ -107,71 +100,9 @@ public class EntityEvents {
                 Vec3 eyePosition = player.getEyePosition(1.0F);
                 Vec3 viewVector = player.getViewVector(1.0F);
                 Vec3 vector3d = eyePosition.add(viewVector.x * range, viewVector.y * range, viewVector.z * range);
-                BlockHitResult result = player.level.clip(new ClipContext(eyePosition, vector3d, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
+                BlockHitResult result = player.level().clip(new ClipContext(eyePosition, vector3d, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
 
-                glasses.gaze(player, player.level, result);
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onChestOpen(PlayerContainerEvent.Open event) {
-        if (event.getContainer() instanceof ChestMenu chestMenu) {
-            ChestBlockEntity chestBlockEntity = null;
-
-            if (chestMenu.getContainer() instanceof ChestBlockEntity chest && chest.getPersistentData().contains(CreeperChestHideGoal.HIDDEN_CREEPER_TAG, Tag.TAG_BYTE)) {
-                chestBlockEntity = chest;
-            }
-            else if (chestMenu.getContainer() instanceof CompoundContainer compoundContainer) {
-                Container container = event.getEntity().level.random.nextBoolean() ? compoundContainer.container1 : compoundContainer.container2;
-
-                if (container instanceof ChestBlockEntity chest && chest.getPersistentData().contains(CreeperChestHideGoal.HIDDEN_CREEPER_TAG, Tag.TAG_BYTE)) {
-                    chestBlockEntity = chest;
-                }
-            }
-            if (chestBlockEntity != null) {
-                CompoundTag data = chestBlockEntity.getPersistentData();
-
-                if (data.getBoolean(CreeperChestHideGoal.HIDDEN_CREEPER_TAG)) {
-                    data.putBoolean(CreeperChestHideGoal.HIDDEN_CREEPER_TAG, false);
-                    BlockPos pos = chestBlockEntity.getBlockPos().above();
-                    Player player = event.getEntity();
-
-                    if (!player.level.isClientSide) {
-                        ServerLevel serverLevel = (ServerLevel) player.level;
-                        EntityType.CREEPER.spawn(serverLevel, null, null, player, pos, MobSpawnType.TRIGGERED, true, false);
-
-                        RandomSource random = player.level.random;
-
-                        serverLevel.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 10, random.nextGaussian(), random.nextGaussian(), random.nextGaussian(), 0.1D);
-                    }
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onChestDestroyed(BlockEvent.BreakEvent event) {
-        if (event.isCanceled())
-            return;
-
-        Player player = event.getPlayer();
-        BlockEntity te = player.level.getBlockEntity(event.getPos());
-
-        if (te instanceof ChestBlockEntity chestBlockEntity) {
-            if (chestBlockEntity.getPersistentData().contains(CreeperChestHideGoal.HIDDEN_CREEPER_TAG, Tag.TAG_BYTE)) {
-                if (chestBlockEntity.getPersistentData().getBoolean(CreeperChestHideGoal.HIDDEN_CREEPER_TAG)) {
-
-                    if (!player.level.isClientSide) {
-                        BlockPos pos = chestBlockEntity.getBlockPos().above();
-                        ServerLevel serverLevel = (ServerLevel) player.level;
-                        EntityType.CREEPER.spawn(serverLevel, null, null, player, pos, MobSpawnType.TRIGGERED, true, false);
-
-                        RandomSource random = player.level.random;
-
-                        serverLevel.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 10, random.nextGaussian(), random.nextGaussian(), random.nextGaussian(), 0.1D);
-                    }
-                }
+                glasses.gaze(player, player.level(), result);
             }
         }
     }
@@ -184,7 +115,12 @@ public class EntityEvents {
                     event.setCancellationResult(InteractionResult.CONSUME);
 
                     if (event.getLevel() instanceof ServerLevel serverLevel) {
-                        TomEntities.BUFFCAT.get().spawn(serverLevel, cat.saveWithoutId(new CompoundTag()), null, event.getEntity(), cat.blockPosition(), MobSpawnType.TRIGGERED, true, false);
+                        Buffcat buffcat = TomEntities.BUFFCAT.get().spawn(serverLevel, null, event.getEntity(), cat.blockPosition(), MobSpawnType.TRIGGERED, true, false);
+
+                        if (buffcat != null) {
+                            buffcat.readAdditionalSaveData(cat.saveWithoutId(new CompoundTag()));
+                        }
+
                         cat.discard();
                     }
                     RandomSource random = event.getLevel().getRandom();

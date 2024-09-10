@@ -32,9 +32,9 @@ public class CookingRecipeBuilderNoTab {
     private final int cookingTime;
     private final Advancement.Builder advancement = Advancement.Builder.advancement();
     private String group;
-    private final SimpleCookingSerializer<?> serializer;
+    private final RecipeSerializer<?> serializer;
 
-    private CookingRecipeBuilderNoTab(ItemLike ingredient, Ingredient result, float xp, int cookingTime, SimpleCookingSerializer<?> serializer) {
+    private CookingRecipeBuilderNoTab(ItemLike ingredient, Ingredient result, float xp, int cookingTime, RecipeSerializer<?> serializer) {
         this.result = ingredient.asItem();
         this.ingredient = result;
         this.experience = xp;
@@ -42,7 +42,7 @@ public class CookingRecipeBuilderNoTab {
         this.serializer = serializer;
     }
 
-    public static CookingRecipeBuilderNoTab cooking(Ingredient ingredient, ItemLike result, float xp, int cookingTime, SimpleCookingSerializer<?> serializer) {
+    public static CookingRecipeBuilderNoTab cooking(Ingredient ingredient, ItemLike result, float xp, int cookingTime, RecipeSerializer<?> serializer) {
         return new CookingRecipeBuilderNoTab(result, ingredient, xp, cookingTime, serializer);
     }
 
@@ -82,8 +82,6 @@ public class CookingRecipeBuilderNoTab {
                 .rewards(AdvancementRewards.Builder.recipe(id))
                 .requirements(RequirementsStrategy.OR);
 
-        String category = result.getItemCategory() == null ? "unspecified" : result.getItemCategory().getRecipeFolderName();
-
         consumer.accept(new Result(
                 id,
                 this.group == null ? "" : this.group,
@@ -92,7 +90,7 @@ public class CookingRecipeBuilderNoTab {
                 this.experience,
                 this.cookingTime,
                 this.advancement,
-                new ResourceLocation(id.getNamespace(), "recipes/" + category + "/" + id.getPath()),
+                new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath()),
                 this.serializer)
         );
     }
@@ -112,9 +110,9 @@ public class CookingRecipeBuilderNoTab {
         private final int cookingTime;
         private final Advancement.Builder advancement;
         private final ResourceLocation advancementId;
-        private final RecipeSerializer<? extends AbstractCookingRecipe> serializer;
+        private final RecipeSerializer<?> serializer;
 
-        public Result(ResourceLocation id, String group, Ingredient ingredient, Item result, float experience, int cookingTime, Advancement.Builder advancement, ResourceLocation advancementId, RecipeSerializer<? extends AbstractCookingRecipe> serializer) {
+        public Result(ResourceLocation id, String group, Ingredient ingredient, Item result, float experience, int cookingTime, Advancement.Builder advancement, ResourceLocation advancementId, RecipeSerializer<?> serializer) {
             this.id = id;
             this.group = group;
             this.ingredient = ingredient;

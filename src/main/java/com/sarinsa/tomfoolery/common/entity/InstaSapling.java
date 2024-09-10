@@ -6,6 +6,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -66,22 +67,22 @@ public class InstaSapling extends Projectile implements IEntityAdditionalSpawnDa
     public void tick() {
         super.tick();
 
-        HitResult hitResult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+        HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         boolean teleporting = false;
 
         if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockPos blockpos = ((BlockHitResult)hitResult).getBlockPos();
-            BlockState blockstate = level.getBlockState(blockpos);
+            BlockState blockstate = level().getBlockState(blockpos);
 
             if (blockstate.is(Blocks.NETHER_PORTAL)) {
                 handleInsidePortal(blockpos);
                 teleporting = true;
             }
             else if (blockstate.is(Blocks.END_GATEWAY)) {
-                BlockEntity blockEntity = level.getBlockEntity(blockpos);
+                BlockEntity blockEntity = level().getBlockEntity(blockpos);
 
                 if (blockEntity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-                    TheEndGatewayBlockEntity.teleportEntity(level, blockpos, blockstate, this, (TheEndGatewayBlockEntity) blockEntity);
+                    TheEndGatewayBlockEntity.teleportEntity(level(), blockpos, blockstate, this, (TheEndGatewayBlockEntity) blockEntity);
                 }
                 teleporting = true;
             }
@@ -108,7 +109,7 @@ public class InstaSapling extends Projectile implements IEntityAdditionalSpawnDa
             traceParticle = ParticleTypes.CLOUD;
             motionScale = 0.99F;
         }
-        level.addParticle(traceParticle, x - deltaMovement.x * 0.25D, y - deltaMovement.y * 0.25D, z - deltaMovement.z * 0.25D, deltaMovement.x, deltaMovement.y, deltaMovement.z);
+        level().addParticle(traceParticle, x - deltaMovement.x * 0.25D, y - deltaMovement.y * 0.25D, z - deltaMovement.z * 0.25D, deltaMovement.x, deltaMovement.y, deltaMovement.z);
         setDeltaMovement(deltaMovement.scale(motionScale));
 
         if (!isNoGravity()) {
@@ -127,16 +128,16 @@ public class InstaSapling extends Projectile implements IEntityAdditionalSpawnDa
             return;
         }
 
-        level.setBlock(result.getBlockPos(), Blocks.DIRT.defaultBlockState(), 2);
+        level().setBlock(result.getBlockPos(), Blocks.DIRT.defaultBlockState(), 2);
 
         if (getItem().getItem() == Items.DARK_OAK_SAPLING) {
-            level.setBlock(result.getBlockPos().north(), Blocks.DIRT.defaultBlockState(), 2);
-            level.setBlock(result.getBlockPos().west(), Blocks.DIRT.defaultBlockState(), 2);
-            level.setBlock(result.getBlockPos().north().west(), Blocks.DIRT.defaultBlockState(), 2);
+            level().setBlock(result.getBlockPos().north(), Blocks.DIRT.defaultBlockState(), 2);
+            level().setBlock(result.getBlockPos().west(), Blocks.DIRT.defaultBlockState(), 2);
+            level().setBlock(result.getBlockPos().north().west(), Blocks.DIRT.defaultBlockState(), 2);
         }
-        if (!level.isClientSide && tree != null) {
-            ServerLevel serverLevel = (ServerLevel) level;
-            tree.growTree(serverLevel, serverLevel.getChunkSource().getGenerator(), result.getBlockPos().above(), level.getBlockState(result.getBlockPos().above()), serverLevel.random);
+        if (!level().isClientSide && tree != null) {
+            ServerLevel serverLevel = (ServerLevel) level();
+            tree.growTree(serverLevel, serverLevel.getChunkSource().getGenerator(), result.getBlockPos().above(), level().getBlockState(result.getBlockPos().above()), serverLevel.random);
         }
         discard();
     }
@@ -146,7 +147,7 @@ public class InstaSapling extends Projectile implements IEntityAdditionalSpawnDa
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

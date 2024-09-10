@@ -4,6 +4,7 @@ import com.sarinsa.tomfoolery.common.core.Tomfoolery;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -13,7 +14,7 @@ import java.util.function.Supplier;
 
 public class TomArmorMaterial implements ArmorMaterial {
 
-    private final Function<EquipmentSlot, Integer> durabilityMultiplier;
+    private final Function<ArmorItem.Type, Integer> durabilityMultiplier;
     private final int[] defenseForSlot;
     private final int enchantmentValue;
     private final Supplier<SoundEvent> sound;
@@ -26,7 +27,7 @@ public class TomArmorMaterial implements ArmorMaterial {
 
 
     public static final TomArmorMaterial NETHERAIGHT = new TomArmorMaterial(
-            (equipmentSlotType) -> 1,
+            (type) -> 1,
             new int[] {3, 6, 8, 3},
             100,
             () -> SoundEvents.ARMOR_EQUIP_NETHERITE,
@@ -37,7 +38,7 @@ public class TomArmorMaterial implements ArmorMaterial {
     );
 
     public static final TomArmorMaterial COOL_GLASSES = new TomArmorMaterial(
-            (equipmentSlotType) -> 40,
+            (type) -> 40,
             new int[] {1, 1, 1, 1},
             100,
             () -> SoundEvents.GLASS_BREAK,
@@ -49,7 +50,7 @@ public class TomArmorMaterial implements ArmorMaterial {
 
 
 
-    private TomArmorMaterial(Function<EquipmentSlot, Integer> durabilityMultiplier, int[] defenseForSlot, int enchantmentValue, Supplier<SoundEvent> sound, Supplier<Ingredient> repairMaterial, String name, float toughness, float knockbackRes) {
+    private TomArmorMaterial(Function<ArmorItem.Type, Integer> durabilityMultiplier, int[] defenseForSlot, int enchantmentValue, Supplier<SoundEvent> sound, Supplier<Ingredient> repairMaterial, String name, float toughness, float knockbackRes) {
         this.durabilityMultiplier = durabilityMultiplier;
         this.defenseForSlot = defenseForSlot;
         this.enchantmentValue = enchantmentValue;
@@ -60,15 +61,14 @@ public class TomArmorMaterial implements ArmorMaterial {
         this.knockbackRes = knockbackRes;
     }
 
-
     @Override
-    public int getDurabilityForSlot(EquipmentSlot equipmentSlotType) {
-        return durabilityMultiplier.apply(equipmentSlotType);
+    public int getDurabilityForType(ArmorItem.Type type) {
+        return durabilityMultiplier.apply(type);
     }
 
     @Override
-    public int getDefenseForSlot(EquipmentSlot equipmentSlotType) {
-        return defenseForSlot[equipmentSlotType.getIndex()];
+    public int getDefenseForType(ArmorItem.Type type) {
+        return defenseForSlot[type.ordinal()];
     }
 
     @Override

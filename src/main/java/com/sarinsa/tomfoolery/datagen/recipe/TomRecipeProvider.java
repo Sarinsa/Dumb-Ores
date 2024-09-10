@@ -5,6 +5,7 @@ import com.sarinsa.tomfoolery.common.core.registry.TomBlocks;
 import com.sarinsa.tomfoolery.common.core.registry.TomItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -23,11 +24,11 @@ import java.util.function.Consumer;
 public class TomRecipeProvider extends RecipeProvider {
 
     public TomRecipeProvider(DataGenerator dataGenerator) {
-        super(dataGenerator);
+        super(dataGenerator.getPackOutput());
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
         smeltingRecipe(TomBlocks.CAKE_ORE.get(), Blocks.STONE, 0.1F, consumer);
         smeltingRecipe(TomBlocks.ORE_ORE.get(), TomItems.NETHERAIGHT_INGOT.get(), 0.3F, consumer);
 
@@ -37,7 +38,7 @@ public class TomRecipeProvider extends RecipeProvider {
         smithingRecipe(Items.DIAMOND_BOOTS, TomItems.NETHERAIGHT_INGOT.get(), TomItems.NETHERAIGHT_BOOTS.get(), consumer);
 
 
-        ShapedRecipeBuilder.shaped(TomItems.EXPLOSIVE_GRENADE_ROUND.get(), 1)
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TomItems.EXPLOSIVE_GRENADE_ROUND.get(), 1)
                 .pattern("#T#")
                 .pattern("#T#")
                 .pattern("#N#")
@@ -50,7 +51,7 @@ public class TomRecipeProvider extends RecipeProvider {
                 .group("grenade_ammo")
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(TomItems.DOOM_GRENADE_ROUND.get(), 2)
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TomItems.DOOM_GRENADE_ROUND.get(), 2)
                 .pattern("#W#")
                 .pattern("#W#")
                 .pattern("#N#")
@@ -63,7 +64,7 @@ public class TomRecipeProvider extends RecipeProvider {
                 .group("grenade_ammo")
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(TomItems.COOL_DIRT_GLASSES.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, TomItems.COOL_DIRT_GLASSES.get())
                 .pattern(" N ")
                 .pattern("GDG")
                 .define('N', Tags.Items.NETHER_STARS)

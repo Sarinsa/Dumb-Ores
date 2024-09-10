@@ -112,8 +112,6 @@ public class ShapedRecipeBuilderNoTab {
                 .rewards(AdvancementRewards.Builder.recipe(id))
                 .requirements(RequirementsStrategy.OR);
 
-        String category = result.getItemCategory() == null ? "unspecified" : result.getItemCategory().getRecipeFolderName();
-
         consumer.accept(new Result(
                 id,
                 this.result,
@@ -122,7 +120,7 @@ public class ShapedRecipeBuilderNoTab {
                 this.rows,
                 this.key,
                 this.advancement,
-                new ResourceLocation(id.getNamespace(), "recipes/" + category + "/" + id.getPath()))
+                new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath()))
         );
     }
 

@@ -24,7 +24,7 @@ public record AddOreModifier(HolderSet<Biome> biomes, GenerationStep.Decoration 
             RegistryObject<PlacedFeature> oreFeature = TomConfiguredFeatures.getOreForType(ore);
 
             if (oreFeature != null) {
-                settings.addFeature(step, oreFeature.getHolder().orElse(OrePlacements.ORE_COAL_LOWER));
+                settings.addFeature(step, oreFeature.getHolder().orElseThrow());
             }
         }
     }

@@ -7,7 +7,6 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.UpgradeRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,11 +16,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-/**
- * Copy-paste of {@link UpgradeRecipeBuilder},
- * modified to not fail when the result item
- * has no item group/creative tab.
- */
 public class SmithingRecipeBuilderNoTab {
 
     private final Ingredient base;
@@ -38,7 +32,7 @@ public class SmithingRecipeBuilderNoTab {
     }
 
     public static SmithingRecipeBuilderNoTab smithing(Ingredient ingredient, Ingredient addition, Item result) {
-        return new SmithingRecipeBuilderNoTab(RecipeSerializer.SMITHING, ingredient, addition, result);
+        return new SmithingRecipeBuilderNoTab(RecipeSerializer.SMITHING_TRANSFORM, ingredient, addition, result);
     }
 
     public SmithingRecipeBuilderNoTab unlocks(String conditionName, CriterionTriggerInstance criterionInstance) {
@@ -57,8 +51,6 @@ public class SmithingRecipeBuilderNoTab {
                 .rewards(AdvancementRewards.Builder.recipe(id))
                 .requirements(RequirementsStrategy.OR);
 
-        String category = result.getItemCategory() == null ? "unspecified" : result.getItemCategory().getRecipeFolderName();
-
         consumer.accept(new Result(
                 id,
                 this.type,
@@ -66,7 +58,7 @@ public class SmithingRecipeBuilderNoTab {
                 this.addition,
                 this.result,
                 this.advancement,
-                new ResourceLocation(id.getNamespace(), "recipes/" + category + "/" + id.getPath())));
+                new ResourceLocation(id.getNamespace(), "recipes/" + id.getPath())));
     }
 
     private void ensureValid(ResourceLocation id) {

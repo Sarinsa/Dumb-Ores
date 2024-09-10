@@ -58,9 +58,9 @@ public class Ghastinator extends Ghast {
     public void checkDespawn() {
         super.checkDespawn();
 
-        if (level.isDay()) {
-            if (!level.isClientSide) {
-                level.playSound(null, blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.HOSTILE, 15.0F, 0.5F);
+        if (level().isDay()) {
+            if (!level().isClientSide) {
+                level().playSound(null, blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.HOSTILE, 15.0F, 0.5F);
             }
             discard();
         }
@@ -103,7 +103,7 @@ public class Ghastinator extends Ghast {
 
     @Override
     public boolean hasLineOfSight(Entity target) {
-        if (target.level != level) {
+        if (target.level() != level()) {
             return false;
         }
         else {
@@ -114,7 +114,7 @@ public class Ghastinator extends Ghast {
                 return false;
             }
             else {
-                return level.clip(new ClipContext(pos, targetPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
+                return level().clip(new ClipContext(pos, targetPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).getType() == HitResult.Type.MISS;
             }
         }
     }
@@ -158,7 +158,7 @@ public class Ghastinator extends Ghast {
 
             if (livingentity != null) {
                 if (livingentity.distanceToSqr(ghastinator) < 40000.0D && ghastinator.hasLineOfSight(livingentity)) {
-                    Level level = ghastinator.level;
+                    Level level = ghastinator.level();
                     ++chargeTime;
 
                     if (chargeTime == 10 && !ghastinator.isSilent()) {
@@ -238,8 +238,8 @@ public class Ghastinator extends Ghast {
             if (targetType != Player.class && targetType != ServerPlayer.class) {
                 return;
             }
-            List<Player> nearbyPlayers = mob.level.getEntitiesOfClass(Player.class, mob.getBoundingBox().inflate(200.0D, 300.0D, 200.0D));
-            target = mob.level.getNearestEntity(nearbyPlayers, targetConditions, mob, mob.getX(), mob.getEyeY(), mob.getZ());
+            List<Player> nearbyPlayers = mob.level().getEntitiesOfClass(Player.class, mob.getBoundingBox().inflate(200.0D, 300.0D, 200.0D));
+            target = mob.level().getNearestEntity(nearbyPlayers, targetConditions, mob, mob.getX(), mob.getEyeY(), mob.getZ());
 
             mob.setAggressive(target != null);
         }

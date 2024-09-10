@@ -57,6 +57,8 @@ public class Tomfoolery {
 
         eventBus.addListener(TomEntities::createEntityAttributes);
         eventBus.addListener(TomEntities::registerEntitySpawnPlacement);
+        eventBus.addListener(TomItems::onCreativeTabPopulate);
+
 
         TomBlocks.BLOCKS.register(eventBus);
         TomItems.ITEMS.register(eventBus);
@@ -69,6 +71,7 @@ public class Tomfoolery {
         TomBiomeModifiers.BIOME_MODS.register(eventBus);
         TomConfiguredFeatures.CF_REGISTRY.register(eventBus);
         TomConfiguredFeatures.P_REGISTRY.register(eventBus);
+        TomDamageTypes.DAMAGE_TYPES.register(eventBus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, TomClientConfig.CLIENT_SPEC);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TomCommonConfig.COMMON_SPEC);

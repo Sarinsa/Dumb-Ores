@@ -50,7 +50,6 @@ public class GrenadeLauncherItem extends ProjectileWeaponItem {
                 .stacksTo(1)
                 .rarity(Rarity.EPIC)
                 .setNoRepair()
-                .tab(CreativeModeTab.TAB_COMBAT)
                 .durability(800)
         );
     }

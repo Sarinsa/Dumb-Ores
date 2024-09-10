@@ -81,7 +81,7 @@ public class ServerEventManager {
                     return;
                 }
 
-                Ghastinator ghastinator = TomEntities.GHASTINATOR.get().create(level, null, null, null, spawnPos, MobSpawnType.EVENT, true, true);
+                Ghastinator ghastinator = TomEntities.GHASTINATOR.get().create(level, null, null, spawnPos, MobSpawnType.EVENT, true, true);
 
                 if (ghastinator != null) {
                     level.addFreshEntity(ghastinator);

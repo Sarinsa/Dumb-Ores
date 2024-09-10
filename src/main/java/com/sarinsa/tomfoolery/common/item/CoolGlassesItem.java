@@ -13,7 +13,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 public abstract class CoolGlassesItem extends ArmorItem {
 
     public CoolGlassesItem() {
-        super(TomArmorMaterial.COOL_GLASSES, EquipmentSlot.HEAD, new Item.Properties().stacksTo(1).tab(CreativeModeTab.TAB_MISC).rarity(Rarity.UNCOMMON));
+        super(TomArmorMaterial.COOL_GLASSES, Type.HELMET, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     }
 
     /**

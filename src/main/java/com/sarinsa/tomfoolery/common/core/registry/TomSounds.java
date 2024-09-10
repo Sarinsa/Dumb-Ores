@@ -15,6 +15,6 @@ public class TomSounds {
 
 
     private static RegistryObject<SoundEvent> register(String name) {
-        return SOUNDS.register(name, () -> new SoundEvent(Tomfoolery.resourceLoc(name)));
+        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Tomfoolery.resourceLoc(name)));
     }
 }

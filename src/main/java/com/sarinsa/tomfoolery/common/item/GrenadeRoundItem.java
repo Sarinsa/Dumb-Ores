@@ -12,8 +12,7 @@ public class GrenadeRoundItem extends Item {
 
     public GrenadeRoundItem(Supplier<GrenadeType> grenadeType) {
         super(new Item.Properties()
-                .stacksTo(6)
-                .tab(CreativeModeTab.TAB_COMBAT));
+                .stacksTo(6));
 
         this.grenadeType = grenadeType;
     }

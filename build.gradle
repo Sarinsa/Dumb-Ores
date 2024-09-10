@@ -12,6 +12,7 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'maven-publish'
+    id 'idea'
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
@@ -159,8 +160,7 @@ tasks.withType(JavaCompile).configureEach {
 
 idea {
     module {
-        downloadSources = true
         downloadJavadoc = true
+        downloadSources = true
     }
 }
-

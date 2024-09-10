@@ -14,7 +14,7 @@ import java.util.List;
 public class TomLootModsProvider extends GlobalLootModifierProvider {
 
     public TomLootModsProvider(DataGenerator gen) {
-        super(gen, Tomfoolery.MODID);
+        super(gen.getPackOutput(), Tomfoolery.MODID);
     }
 
     @Override
