@@ -1,5 +1,6 @@
 package com.sarinsa.tomfoolery.common.entity;
 
+import com.sarinsa.tomfoolery.common.core.registry.TomEffects;
 import com.sarinsa.tomfoolery.common.core.registry.TomEntities;
 import com.sarinsa.tomfoolery.common.util.NBTHelper;
 import net.minecraft.core.BlockPos;
@@ -11,10 +12,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -71,22 +70,15 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
 
     @Override
     public void tick() {
-        super.tick();
-
         if (gracePeriod > 0)
             --gracePeriod;
 
-        if (followTarget != null && followTarget.isAlive() && NBTHelper.isEntityCactusMarked(followTarget)) {
-            double xMotion = followTarget.getX() - getX();
-            double yMotion = (followTarget.getY() + followTarget.getEyeHeight()) - getY();
-            double zMotion = followTarget.getZ() - getZ();
+        if (followTarget != null && followTarget.isAlive() && followTarget.hasEffect(TomEffects.CACTUS_ATTRACTION.get())) {
+            Vec3 vec = new Vec3(followTarget.getX() - getX(), (followTarget.getY() + followTarget.getEyeHeight()) - getY(), followTarget.getZ() - getZ());
+            setDeltaMovement(vec.scale(0.1D));
 
-            Vec3 deltaMovement = new Vec3(xMotion, yMotion, zMotion).normalize().scale(0.7);
-            setDeltaMovement(deltaMovement);
-
-            if (distanceToSqr(followTarget) > 600) {
+            if (distanceToSqr(followTarget) > 600)
                 followTarget = null;
-            }
         }
         else {
             if (!isNoGravity()) {
@@ -105,6 +97,8 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
             level().setBlock(blockPosition(), Blocks.CACTUS.defaultBlockState(), 3);
             discard();
         }
+
+        super.tick();
     }
 
     @Override
@@ -136,7 +130,6 @@ public class CactusBlockEntity extends Entity implements IEntityAdditionalSpawnD
         compoundTag.putInt("FollowTarget", followTarget == null ? getId() : followTarget.getId());
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public boolean displayFireAnimation() {
         return false;
