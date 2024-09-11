@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.entity.GhastRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 public class GhastinatorRenderer extends MobRenderer<Ghastinator, GhastinatorModel> {
 
     private static final ResourceLocation IDLE = Tomfoolery.resourceLoc("textures/entity/ghastinator/idle.png");
@@ -21,10 +23,12 @@ public class GhastinatorRenderer extends MobRenderer<Ghastinator, GhastinatorMod
     }
 
     @Override
-    protected void scale(Ghastinator ghastinator, PoseStack poseStack, float partialTick) {
+    protected void scale(@Nonnull Ghastinator ghastinator, PoseStack poseStack, float partialTick) {
         poseStack.scale(100F, 100F, 100F);
     }
 
+    @Override
+    @Nonnull
     public ResourceLocation getTextureLocation(Ghastinator ghastinator) {
         if (ghastinator.isAggressive()) {
             return ghastinator.isCharging() ? SHOOTING : SEES_TARGET;
